@@ -1,0 +1,112 @@
+//nama : saripudin
+//fak : Teknik informatika
+//angk : 2017/2018
+//uas semester 2
+program huruf_mutu;
+uses crt;
+const
+  jml_data = 10;
+type
+  tmhs = record
+           matkul,nm : string;
+           absent,tugas,quiz,uts,uas,total : real;
+           huruf_mutu : char;
+         end;
+  tarr_mhs = array [1..jml_data] of tmhs;
+
+  function menu:char;
+  begin
+    writeln('*****************');
+    writeln('* 1.Input  Data *');
+    writeln('* 2.Output Data *');
+    writeln('*****************');
+    writeln('* 0.Keluar      *');
+    writeln('*****************');
+    write('Pilih menu : '); menu := readkey;
+  end;
+
+  procedure input_data(idx:integer;var data:tarr_mhs);
+  begin
+     writeln('Data ke-',idx);
+     write('Nama Mahasiswa        : ');readln(data[idx].nm);
+     write('Mata kuliah           : ');readln(data[idx].matkul);
+     write('Nilai Absensi         : ');readln(data[idx].absent);
+     write('Nilai Tugas           : ');readln(data[idx].tugas);
+     write('Nilai Quiz            : ');readln(data[idx].quiz);
+     write('Nilai Uts             : ');readln(data[idx].uts);
+     write('Nilai Uas             : ');readln(data[idx].uas);
+  end;
+
+  procedure proses_data(var data:tmhs);
+  begin
+   data.total := (data.absent + data.tugas + data.quiz + data.uts + data.uas)/ 5 ;
+   if (data.total>85) and (data.total <=100) then
+   data.huruf_mutu:='A'
+   else if (data.total>70) and (data.total<=85) then
+   data.huruf_mutu:='B'
+   else if (data.total>55) and (data.total<=70) then
+   data.huruf_mutu:='C'
+   else if (data.total>40) and (data.total<=55) then
+   data.huruf_mutu:='D'
+   else
+   data.huruf_mutu:='E';
+  end;
+
+  procedure output_data(jml:integer;data:tarr_mhs);
+  var
+    i:integer;
+  begin
+    if jml=0 then
+    begin
+       writeln('Tidak Ada Data !');
+       readkey;
+    end
+    else
+         for i:=1 to jml do
+         begin
+           writeln('Data ke-',i);
+           writeln('Nama Mahasiswa                       : ',data[i].nm);
+           writeln('Mata kuliah                          : ',data[i].matkul);
+           writeln('Nilai Absensi                        : ',data[i].absent:4:2);
+           writeln('Nilai Tugas                          : ',data[i].tugas:4:2);
+           writeln('Nilai Quiz                           : ',data[i].quiz:4:2);
+           writeln('Nilai Uts                            : ',data[i].uts:4:2);
+           writeln('Nilai Uas                            : ',data[i].uas:4:2);
+           write('Nilai Rata rata atau Huruf mutu      : ',data[i].total:4:2);
+           writeln(' atau ' ,data[i].huruf_mutu);
+           writeln;
+         end;
+
+  end;
+
+var
+  no_menu,terus:char;
+  jml_mhs:integer;
+  data_mhs : tarr_mhs;
+begin
+  jml_mhs:=0;
+  repeat
+    clrscr;
+    no_menu:=menu;
+    case no_menu of
+     '1' : begin
+            clrscr;
+            repeat
+              input_data(jml_mhs+1,data_mhs);
+              proses_data(data_mhs[jml_mhs+1]);
+              jml_mhs:=jml_mhs+1;
+              writeln;
+              write('Input Data Lagi (y/n) : ');terus:=readkey;
+              writeln;
+              writeln;
+            until(terus='n');
+           end;
+
+     '2' :  begin
+              clrscr;
+              output_data(jml_mhs,data_mhs);
+              readln;
+            end;
+    end;
+  until(no_menu='0');
+end.
